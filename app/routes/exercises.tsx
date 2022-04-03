@@ -3,16 +3,16 @@ import { json } from '@remix-run/node'
 import { Link, NavLink, Outlet, useLoaderData } from '@remix-run/react'
 
 import { requireUserId } from '~/session.server'
-import { getNoteListItems } from '~/models/note.server'
+import { getExerciseListItems } from '~/models/exercise.server'
 
 type LoaderData = {
-  noteListItems: Awaited<ReturnType<typeof getNoteListItems>>
+  exerciseListItems: Awaited<ReturnType<typeof getExerciseListItems>>
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request)
-  const noteListItems = await getNoteListItems({ userId })
-  return json<LoaderData>({ noteListItems })
+  const exerciseListItems = await getExerciseListItems({ userId })
+  return json<LoaderData>({ exerciseListItems })
 }
 
 export default function NotesPage() {
@@ -27,19 +27,19 @@ export default function NotesPage() {
 
         <hr />
 
-        {data.noteListItems.length === 0 ? (
-          <p className="p-4">No notes yet</p>
+        {data.exerciseListItems.length === 0 ? (
+          <p className="p-4">No exercises yet</p>
         ) : (
           <ol>
-            {data.noteListItems.map(note => (
-              <li key={note.id}>
+            {data.exerciseListItems.map(exercise => (
+              <li key={exercise.id}>
                 <NavLink
                   className={({ isActive }) =>
                     `block border-b p-4 text-xl ${isActive ? 'bg-white' : ''}`
                   }
-                  to={note.id}
+                  to={exercise.id}
                 >
-                  📝 {note.title}
+                  {exercise.name}
                 </NavLink>
               </li>
             ))}
