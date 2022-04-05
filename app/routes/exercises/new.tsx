@@ -39,7 +39,7 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect(`/exercises/${exercise.id}`)
 }
 
-export default function NewNotePage() {
+export default function NewExercisePage() {
   const actionData = useActionData() as ActionData
   const nameRef = React.useRef<HTMLInputElement>(null)
   const notesRef = React.useRef<HTMLTextAreaElement>(null)

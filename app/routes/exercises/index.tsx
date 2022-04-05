@@ -1,11 +1,11 @@
 import { Link } from '@remix-run/react'
 
-export default function NoteIndexPage() {
+export default function ExerciseIndexPage() {
   return (
     <p>
-      No note selected. Select a note on the left, or{' '}
+      No exercise selected. Select an exercise on the left, or{' '}
       <Link to="new" className="text-blue-500 underline">
-        create a new note.
+        create a new exercise.
       </Link>
     </p>
   )
