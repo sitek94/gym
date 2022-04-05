@@ -3,12 +3,11 @@ import { json, redirect } from '@remix-run/node'
 import { Form, useCatch, useLoaderData } from '@remix-run/react'
 import invariant from 'tiny-invariant'
 
-import type { ExerciseSet } from '~/models/exercise-set.server'
 import { deleteExerciseSet, getExerciseSet } from '~/models/exercise-set.server'
 import { requireUserId } from '~/session.server'
 
 type LoaderData = {
-  exerciseSet: ExerciseSet
+  exerciseSet: Awaited<ReturnType<typeof getExerciseSet>>
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -36,17 +35,24 @@ export default function ExerciseSetDetailsPage() {
 
   return (
     <div>
-      <h3 className="text-2xl font-bold">{data.exerciseSet.id}</h3>
-      <p className="py-6">{data.exerciseSet.notes}</p>
-      <hr className="my-4" />
-      <Form method="post">
-        <button
-          type="submit"
-          className="rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
-        >
-          Delete
-        </button>
-      </Form>
+      {data.exerciseSet && (
+        <>
+          <h3 className="text-2xl font-bold">
+            {new Date(data.exerciseSet.date).toLocaleDateString()}&mdash;
+            {data.exerciseSet.reps} {data.exerciseSet.exercise.name}
+          </h3>
+          <p className="py-6">{data.exerciseSet.notes}</p>
+          <hr className="my-4" />
+          <Form method="post">
+            <button
+              type="submit"
+              className="rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
+            >
+              Delete
+            </button>
+          </Form>
+        </>
+      )}
     </div>
   )
 }

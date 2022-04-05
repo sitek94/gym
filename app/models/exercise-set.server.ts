@@ -12,13 +12,14 @@ export function getExerciseSet({
 }) {
   return prisma.exerciseSet.findFirst({
     where: { id, userId },
+    include: { exercise: true },
   })
 }
 
 export function getExerciseSetListItems({ userId }: { userId: User['id'] }) {
   return prisma.exerciseSet.findMany({
     where: { userId },
-    select: { id: true, date: true },
+    select: { id: true, date: true, reps: true, exercise: true },
     orderBy: { date: 'desc' },
   })
 }

@@ -3,16 +3,16 @@ import { json } from '@remix-run/node'
 import { Link, NavLink, Outlet, useLoaderData } from '@remix-run/react'
 
 import { requireUserId } from '~/session.server'
-import { getExerciseListItems } from '~/models/exercise.server'
+import { getExerciseSetListItems } from '~/models/exercise-set.server'
 
 type LoaderData = {
-  exerciseListItems: Awaited<ReturnType<typeof getExerciseListItems>>
+  exerciseSetListItems: Awaited<ReturnType<typeof getExerciseSetListItems>>
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
   const userId = await requireUserId(request)
-  const exerciseListItems = await getExerciseListItems({ userId })
-  return json<LoaderData>({ exerciseListItems })
+  const exerciseSetListItems = await getExerciseSetListItems({ userId })
+  return json<LoaderData>({ exerciseSetListItems })
 }
 
 export default function ExercisesPage() {
@@ -22,24 +22,25 @@ export default function ExercisesPage() {
     <main className="flex h-full bg-white">
       <div className="h-full w-80 border-r bg-gray-50">
         <Link to="new" className="block p-4 text-xl text-blue-500">
-          + New Exercise
+          + New Set
         </Link>
 
         <hr />
 
-        {data.exerciseListItems.length === 0 ? (
-          <p className="p-4">No exercises yet</p>
+        {data.exerciseSetListItems.length === 0 ? (
+          <p className="p-4">No sets yet</p>
         ) : (
           <ol>
-            {data.exerciseListItems.map(exercise => (
-              <li key={exercise.id}>
+            {data.exerciseSetListItems.map(exerciseSet => (
+              <li key={exerciseSet.id}>
                 <NavLink
                   className={({ isActive }) =>
                     `block border-b p-4 text-xl ${isActive ? 'bg-white' : ''}`
                   }
-                  to={exercise.id}
+                  to={exerciseSet.id}
                 >
-                  {exercise.name}
+                  {new Date(exerciseSet.date).toLocaleDateString()}&mdash;
+                  {exerciseSet.reps} {exerciseSet.exercise.name}
                 </NavLink>
               </li>
             ))}
