@@ -2,6 +2,8 @@ import type { Exercise, User } from '@prisma/client'
 
 import { prisma } from '~/db.server'
 
+export type { Exercise } from '@prisma/client'
+
 export function getExercise({
   id,
   userId,
