@@ -1,4 +1,10 @@
-# Remix Indie Stack
+# Gym
+
+I'm using [Strong](https://www.strong.app/) app to keep track of my workouts, and I'm loving it, but I don't want to pay
+extra just to see some charts. Especially, that I'm interested only in weekly volume. Seems like a perfect opportunity
+to give [Remix](https://remix.run/) a try 🚀
+
+## Remix Indie Stack
 
 ![The Remix Indie Stack](https://repository-images.githubusercontent.com/465928257/a241fa49-bd4d-485a-a2a5-5cb8e4ee0abf)
 
