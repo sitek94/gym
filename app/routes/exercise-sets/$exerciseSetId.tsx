@@ -3,41 +3,41 @@ import { json, redirect } from '@remix-run/node'
 import { Form, useCatch, useLoaderData } from '@remix-run/react'
 import invariant from 'tiny-invariant'
 
-import type { Note } from '~/models/note.server'
-import { deleteNote, getNote } from '~/models/note.server'
+import type { ExerciseSet } from '~/models/exercise-set.server'
+import { deleteExerciseSet, getExerciseSet } from '~/models/exercise-set.server'
 import { requireUserId } from '~/session.server'
 
 type LoaderData = {
-  note: Note
+  exerciseSet: ExerciseSet
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   const userId = await requireUserId(request)
-  invariant(params.noteId, 'noteId not found')
+  invariant(params.exerciseSetId, 'exerciseSetId not found')
 
-  const note = await getNote({ userId, id: params.noteId })
-  if (!note) {
+  const exerciseSet = await getExerciseSet({ userId, id: params.exerciseSetId })
+  if (!exerciseSet) {
     throw new Response('Not Found', { status: 404 })
   }
-  return json<LoaderData>({ note })
+  return json<LoaderData>({ exerciseSet })
 }
 
 export const action: ActionFunction = async ({ request, params }) => {
   const userId = await requireUserId(request)
-  invariant(params.noteId, 'noteId not found')
+  invariant(params.exerciseSetId, 'exerciseSetId not found')
 
-  await deleteNote({ userId, id: params.noteId })
+  await deleteExerciseSet({ userId, id: params.exerciseSetId })
 
   return redirect('/notes')
 }
 
-export default function NoteDetailsPage() {
+export default function ExerciseSetDetailsPage() {
   const data = useLoaderData() as LoaderData
 
   return (
     <div>
-      <h3 className="text-2xl font-bold">{data.note.title}</h3>
-      <p className="py-6">{data.note.body}</p>
+      <h3 className="text-2xl font-bold">{data.exerciseSet.id}</h3>
+      <p className="py-6">{data.exerciseSet.notes}</p>
       <hr className="my-4" />
       <Form method="post">
         <button

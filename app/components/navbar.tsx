@@ -6,7 +6,7 @@ import clsx from 'clsx'
 const LINKS = [
   { name: 'Exercises', path: '/exercises' },
   { name: 'Workouts', path: '/workouts' },
-  { name: 'Sets', path: '/sets' },
+  { name: 'Sets', path: '/exercise-sets' },
   { name: 'Notes', path: '/notes' },
 ]
 
