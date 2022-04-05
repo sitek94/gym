@@ -3,13 +3,13 @@ import { json, redirect } from '@remix-run/node'
 import { Form, useActionData } from '@remix-run/react'
 import * as React from 'react'
 
-import { createNote } from '~/models/note.server'
+import { createExercise } from '~/models/exercise.server'
 import { requireUserId } from '~/session.server'
 
 type ActionData = {
   errors?: {
-    title?: string
-    body?: string
+    name?: string
+    notes?: string
   }
 }
 
@@ -17,38 +17,38 @@ export const action: ActionFunction = async ({ request }) => {
   const userId = await requireUserId(request)
 
   const formData = await request.formData()
-  const title = formData.get('title')
-  const body = formData.get('body')
+  const name = formData.get('name')
+  const notes = formData.get('notes')
 
-  if (typeof title !== 'string' || title.length === 0) {
+  if (typeof name !== 'string' || name.length === 0) {
     return json<ActionData>(
-      { errors: { title: 'Title is required' } },
+      { errors: { name: 'Name is required' } },
       { status: 400 },
     )
   }
 
-  if (typeof body !== 'string' || body.length === 0) {
+  if (typeof notes !== 'string' || notes.length === 0) {
     return json<ActionData>(
-      { errors: { body: 'Body is required' } },
+      { errors: { notes: 'Notes is required' } },
       { status: 400 },
     )
   }
 
-  const note = await createNote({ title, body, userId })
+  const exercise = await createExercise({ name, notes, userId })
 
-  return redirect(`/notes/${note.id}`)
+  return redirect(`/exercises/${exercise.id}`)
 }
 
 export default function NewNotePage() {
   const actionData = useActionData() as ActionData
-  const titleRef = React.useRef<HTMLInputElement>(null)
-  const bodyRef = React.useRef<HTMLTextAreaElement>(null)
+  const nameRef = React.useRef<HTMLInputElement>(null)
+  const notesRef = React.useRef<HTMLTextAreaElement>(null)
 
   React.useEffect(() => {
-    if (actionData?.errors?.title) {
-      titleRef.current?.focus()
-    } else if (actionData?.errors?.body) {
-      bodyRef.current?.focus()
+    if (actionData?.errors?.name) {
+      nameRef.current?.focus()
+    } else if (actionData?.errors?.notes) {
+      notesRef.current?.focus()
     }
   }, [actionData])
 
@@ -66,18 +66,18 @@ export default function NewNotePage() {
         <label className="flex w-full flex-col gap-1">
           <span>Name: </span>
           <input
-            ref={titleRef}
-            name="title"
+            ref={nameRef}
+            name="name"
             className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
-            aria-invalid={actionData?.errors?.title ? true : undefined}
+            aria-invalid={actionData?.errors?.name ? true : undefined}
             aria-errormessage={
-              actionData?.errors?.title ? 'title-error' : undefined
+              actionData?.errors?.name ? 'title-error' : undefined
             }
           />
         </label>
-        {actionData?.errors?.title && (
+        {actionData?.errors?.name && (
           <div className="pt-1 text-red-700" id="title-error">
-            {actionData.errors.title}
+            {actionData.errors.name}
           </div>
         )}
       </div>
@@ -86,19 +86,19 @@ export default function NewNotePage() {
         <label className="flex w-full flex-col gap-1">
           <span>Notes: </span>
           <textarea
-            ref={bodyRef}
-            name="body"
+            ref={notesRef}
+            name="notes"
             rows={8}
             className="w-full flex-1 rounded-md border-2 border-blue-500 py-2 px-3 text-lg leading-6"
-            aria-invalid={actionData?.errors?.body ? true : undefined}
+            aria-invalid={actionData?.errors?.notes ? true : undefined}
             aria-errormessage={
-              actionData?.errors?.body ? 'body-error' : undefined
+              actionData?.errors?.notes ? 'body-error' : undefined
             }
           />
         </label>
-        {actionData?.errors?.body && (
+        {actionData?.errors?.notes && (
           <div className="pt-1 text-red-700" id="body-error">
-            {actionData.errors.body}
+            {actionData.errors.notes}
           </div>
         )}
       </div>

@@ -107,6 +107,8 @@ export default function LoginPage() {
                 id="email"
                 required
                 autoFocus={true}
+                // FIXME: Development only
+                defaultValue="rachel@remix.run"
                 name="email"
                 type="email"
                 autoComplete="email"
@@ -135,6 +137,8 @@ export default function LoginPage() {
                 ref={passwordRef}
                 name="password"
                 type="password"
+                // FIXME: Development only
+                defaultValue="racheliscool"
                 autoComplete="current-password"
                 aria-invalid={actionData?.errors?.password ? true : undefined}
                 aria-describedby="password-error"
